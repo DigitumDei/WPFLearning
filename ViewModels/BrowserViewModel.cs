@@ -96,7 +96,7 @@ namespace WPFLearning.ViewModels
             }
         }
 
-        public void UpdateAddressFromWebView(Uri uri)
+        public virtual void UpdateAddressFromWebView(Uri uri)
         {
             Address = uri?.ToString() ?? "";
         }
@@ -106,11 +106,25 @@ namespace WPFLearning.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    public class RelayCommand(Action<object?> execute) : ICommand
+    public class RelayCommand : ICommand
     {
-        private readonly Action<object?> _execute = execute;
-        public bool CanExecute(object? parameter) => true;
-        public void Execute(object? parameter) => _execute(parameter);
-        public event EventHandler? CanExecuteChanged;
+        private readonly Action<object> _execute;
+        private readonly Predicate<object> _canExecute;
+
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
+        {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
+        }
+
+        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
+
+        public void Execute(object parameter) => _execute(parameter);
+
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
     }
 }
