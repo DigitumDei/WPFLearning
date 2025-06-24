@@ -1,14 +1,6 @@
-﻿using System.Text;
+﻿using Microsoft.Web.WebView2.Core;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Web.WebView2.Core;
 using WPFLearning.ViewModels;
 
 namespace WPFLearning
@@ -38,6 +30,12 @@ namespace WPFLearning
         {
             if (DataContext is BrowserViewModel vm)
                 vm.UpdateAddressFromWebView(WebView.Source);
+        }
+
+        private void SuggestionList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is BrowserViewModel vm && vm.DuckDuckGoSearchCommand.CanExecute(null))
+                vm.DuckDuckGoSearchCommand.Execute(null);
         }
     }
 }

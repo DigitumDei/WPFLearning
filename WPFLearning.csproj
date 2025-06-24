@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3344-prerelease" />
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
   </ItemGroup>
 
 </Project>
