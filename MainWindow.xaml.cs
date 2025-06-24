@@ -43,5 +43,10 @@ namespace WPFLearning
                     mainVm.SelectedTab.DuckDuckGoSearchCommand.Execute(null);
             }
         }
+
+        private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

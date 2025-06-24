@@ -3,7 +3,9 @@ namespace WPFLearning.ViewModels
     public class TabViewModel : BrowserViewModel
     {
         private string _title = "New Tab";
-
+        public TabViewModel()
+        {
+        }
         public string Title
         {
             get => _title;
