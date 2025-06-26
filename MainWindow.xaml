@@ -7,11 +7,11 @@
                  xmlns:vm="clr-namespace:WPFLearning.ViewModels"
                  xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                 xmlns:b="http://metro.mahapps.com/winfx/xaml/behaviors" xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
                  mc:Ignorable="d"
                  Title="Tabbed Browser" Height="450" Width="800">
-    <mah:MetroWindow.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </mah:MetroWindow.Resources>
+    
     <mah:MetroWindow.DataContext>
         <vm:MainViewModel/>
     </mah:MetroWindow.DataContext>
@@ -19,8 +19,10 @@
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5">
             <Button Content="New Tab" Command="{Binding NewTabCommand}" Margin="0,0,5,0"/>
         </StackPanel>
-        <TabControl ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}" SelectionChanged="TabControl_SelectionChanged">
-            <TabControl.ItemTemplate>
+        <dragablz:TabablzControl ItemsSource="{Binding Tabs}" 
+                     SelectedItem="{Binding SelectedTab}">
+
+            <dragablz:TabablzControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Title}" Margin="0,0,5,0"/>
@@ -30,8 +32,8 @@
                                 Padding="0" Width="16" Height="16"/>
                     </StackPanel>
                 </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
+            </dragablz:TabablzControl.ItemTemplate>
+            <dragablz:TabablzControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top">
@@ -51,7 +53,7 @@
                       NavigationCompleted="WebView_NavigationCompleted"/>
                     </DockPanel>
                 </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
+            </dragablz:TabablzControl.ContentTemplate>
+        </dragablz:TabablzControl>
     </DockPanel>
 </mah:MetroWindow>
