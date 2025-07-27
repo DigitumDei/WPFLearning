@@ -25,5 +25,13 @@ namespace WPFLearning.ViewModels
             // Update tab title based on the page title or URL
             Title = uri?.Host ?? "New Tab";
         }
+
+        public void UpdateTitle(string pageTitle)
+        {
+            if (!string.IsNullOrEmpty(pageTitle))
+            {
+                Title = pageTitle;
+            }
+        }
     }
 }

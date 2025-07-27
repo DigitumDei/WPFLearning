@@ -1,4 +1,4 @@
-﻿<mah:MetroWindow x:Class="WPFLearning.MainWindow"
+﻿<dragablz:DragablzWindow x:Class="WPFLearning.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,33 +6,29 @@
                  xmlns:local="clr-namespace:WPFLearning"
                  xmlns:vm="clr-namespace:WPFLearning.ViewModels"
                  xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                 xmlns:b="http://metro.mahapps.com/winfx/xaml/behaviors" xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+                 xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"                         
+                 xmlns:dockablz="http://dragablz.net/winfx/xaml/dockablz"
                  mc:Ignorable="d"
                  Title="Tabbed Browser" Height="450" Width="800">
-    
-    <mah:MetroWindow.DataContext>
-        <vm:MainViewModel/>
-    </mah:MetroWindow.DataContext>
-    <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="5">
-            <Button Content="New Tab" Command="{Binding NewTabCommand}" Margin="0,0,5,0"/>
-        </StackPanel>
-        <dragablz:TabablzControl ItemsSource="{Binding Tabs}" 
-                     SelectedItem="{Binding SelectedTab}">
 
-            <dragablz:TabablzControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Title}" Margin="0,0,5,0"/>
-                        <Button Content="x"
-                                Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}" 
-                                Padding="0" Width="16" Height="16"/>
-                    </StackPanel>
-                </DataTemplate>
-            </dragablz:TabablzControl.ItemTemplate>
+    <dragablz:DragablzWindow.DataContext>
+        <vm:MainViewModel/>
+    </dragablz:DragablzWindow.DataContext>
+    <DockPanel>
+        <dragablz:TabablzControl x:Name="TabControl"
+                                 ItemsSource="{Binding Tabs}" 
+                                 SelectedItem="{Binding SelectedTab}"
+                                 HeaderMemberPath="Title"
+                                 ItemContainerStyle="{StaticResource CustomTabItemStyle}"
+                                 ShowDefaultAddButton="True"
+                                 DockPanel.Dock="Top"
+                                 ClosingItemCallback="{Binding ClosingTabItemHandler}"
+                                 NewItemFactory="{Binding NewItemFactory}">
+
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController InterTabClient="{Binding}" />
+            </dragablz:TabablzControl.InterTabController>
             <dragablz:TabablzControl.ContentTemplate>
                 <DataTemplate>
                     <DockPanel>
@@ -49,11 +45,10 @@
                             </ListBox>
                         </StackPanel>
 
-                        <wv2:WebView2 Source="{Binding Source, Mode=TwoWay}"
-                      NavigationCompleted="WebView_NavigationCompleted"/>
+                        <wv2:WebView2 Source="{Binding Source, Mode=TwoWay}" NavigationCompleted="WebView_NavigationCompleted"/>
                     </DockPanel>
                 </DataTemplate>
             </dragablz:TabablzControl.ContentTemplate>
         </dragablz:TabablzControl>
     </DockPanel>
-</mah:MetroWindow>
+</dragablz:DragablzWindow>

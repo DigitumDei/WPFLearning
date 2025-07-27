@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(dotnet.exe build:*)",
+      "Bash(dotnet.exe clean:*)"
+    ],
+    "deny": []
+  }
+}

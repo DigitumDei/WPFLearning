@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WPFLearning"
              xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -10,8 +11,111 @@
                 <!-- MahApps.Metro resource dictionaries -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />                
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Custom TabItem Style with Close Button and proper Dragablz behavior -->
+            <Style x:Key="CustomTabItemStyle" TargetType="{x:Type dragablz:DragablzItem}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="Padding" Value="6,2,6,2"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
+                            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                                <Border x:Name="mainBorder" 
+                                        Background="LightGray" 
+                                        BorderBrush="Gray" 
+                                        BorderThickness="1" 
+                                        CornerRadius="4,4,0,0" 
+                                        Margin="2,0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <!-- Essential Thumb for dragging -->
+                                        <Thumb x:Name="PART_Thumb" 
+                                               Grid.ColumnSpan="2"
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                            <Thumb.Template>
+                                                <ControlTemplate TargetType="Thumb">
+                                                    <Grid Background="Transparent">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        
+                                                        <!-- Tab content -->
+                                                        <TextBlock Grid.Column="0"
+                                                                   Text="{Binding Title}" 
+                                                                   Margin="8,4" 
+                                                                   VerticalAlignment="Center"
+                                                                   HorizontalAlignment="Left"/>
+                                                        
+                                                        <!-- Close button -->
+                                                        <Button Grid.Column="1" 
+                                                                Content="×" 
+                                                                Width="16" 
+                                                                Height="16"
+                                                                Margin="4,2"
+                                                                Background="Transparent"
+                                                                BorderThickness="0"
+                                                                FontSize="12"
+                                                                Foreground="Gray"
+                                                                Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"
+                                                                ToolTip="Close tab"
+                                                                Cursor="Hand">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="Button">
+                                                                                <Border Background="{TemplateBinding Background}" 
+                                                                                        CornerRadius="2">
+                                                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                                                                      VerticalAlignment="Center"/>
+                                                                                </Border>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                                        <Setter Property="Background" Value="#FFE0E0E0"/>
+                                                                                        <Setter Property="Foreground" Value="Black"/>
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Thumb.Template>
+                                        </Thumb>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="mainBorder" Property="Background" Value="White"/>
+                                    <Setter TargetName="mainBorder" Property="BorderBrush" Value="DarkGray"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="mainBorder" Property="Background" Value="#FFF0F0F0"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
