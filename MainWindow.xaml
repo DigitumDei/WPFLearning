@@ -16,39 +16,42 @@
         <vm:MainViewModel/>
     </dragablz:DragablzWindow.DataContext>
     <DockPanel>
-        <dragablz:TabablzControl x:Name="TabControl"
-                                 ItemsSource="{Binding Tabs}" 
-                                 SelectedItem="{Binding SelectedTab}"
-                                 HeaderMemberPath="Title"
-                                 ItemContainerStyle="{StaticResource CustomTabItemStyle}"
-                                 ShowDefaultAddButton="True"
-                                 DockPanel.Dock="Top"
-                                 ClosingItemCallback="{Binding ClosingTabItemHandler}"
-                                 NewItemFactory="{Binding NewItemFactory}">
 
-            <dragablz:TabablzControl.InterTabController>
-                <dragablz:InterTabController InterTabClient="{Binding}" />
-            </dragablz:TabablzControl.InterTabController>
-            <dragablz:TabablzControl.ContentTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <StackPanel DockPanel.Dock="Top">
-                            <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
-                                 KeyDown="AddressBar_KeyDown" 
-                                 Margin="5"/>
+            <!-- Main Tab Control -->
+            <dragablz:TabablzControl x:Name="TabControl"
+                                     ItemsSource="{Binding Tabs}" 
+                                     SelectedItem="{Binding SelectedTab}"
+                                     HeaderMemberPath="Title"
+                                     ItemContainerStyle="{StaticResource CustomTabItemStyle}"                                
+                                     ShowDefaultAddButton="True"
+                                     DockPanel.Dock="Top"
+                                     ClosingItemCallback="{Binding ClosingTabItemHandler}"
+                                     NewItemFactory="{Binding NewItemFactory}">
+                <dragablz:TabablzControl.HeaderSuffixContent>
+                    <Border Width="100" Background="Transparent"/>
+                </dragablz:TabablzControl.HeaderSuffixContent>
+                <dragablz:TabablzControl.InterTabController>
+                    <dragablz:InterTabController InterTabClient="{Binding}" />
+                </dragablz:TabablzControl.InterTabController>
+                <dragablz:TabablzControl.ContentTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Top">
+                                <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
+                                     KeyDown="AddressBar_KeyDown" 
+                                     Margin="5"/>
+                                <ListBox Visibility="{Binding ShowSuggestion, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         MouseLeftButtonUp="SuggestionList_MouseLeftButtonUp"
+                                         Margin="5,0,5,5"
+                                         MaxHeight="200">
+                                    <ListBoxItem Content="{Binding DuckDuckGoSuggestion}"/>
+                                </ListBox>
+                            </StackPanel>
+                            <wv2:WebView2 Source="{Binding Source, Mode=TwoWay}" NavigationCompleted="WebView_NavigationCompleted"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </dragablz:TabablzControl.ContentTemplate>
+            </dragablz:TabablzControl>
 
-                            <ListBox Visibility="{Binding ShowSuggestion, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                     MouseLeftButtonUp="SuggestionList_MouseLeftButtonUp"
-                                     Margin="5,0,5,5"
-                                     MaxHeight="200">
-                                <ListBoxItem Content="{Binding DuckDuckGoSuggestion}"/>
-                            </ListBox>
-                        </StackPanel>
-
-                        <wv2:WebView2 Source="{Binding Source, Mode=TwoWay}" NavigationCompleted="WebView_NavigationCompleted"/>
-                    </DockPanel>
-                </DataTemplate>
-            </dragablz:TabablzControl.ContentTemplate>
-        </dragablz:TabablzControl>
     </DockPanel>
 </dragablz:DragablzWindow>
